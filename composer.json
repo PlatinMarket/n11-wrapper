@@ -9,10 +9,9 @@
         }
     ],
     "require": {
-        "guzzlehttp/guzzle": "^7.0",
-        "spatie/array-to-xml": "^2.15",
         "ext-json": "*",
-        "ext-simplexml": "*"
+        "ext-simplexml": "*",
+        "ext-soap": "*"
     },
     "autoload": {
         "psr-4": {
