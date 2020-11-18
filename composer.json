@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "phpunit/phpunit": "^9.3",
         "ext-json": "*",
         "ext-simplexml": "*",
         "ext-soap": "*"
@@ -16,6 +17,11 @@
     "autoload": {
         "psr-4": {
             "N11\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "N11\\": "tests/"
         }
     }
 }

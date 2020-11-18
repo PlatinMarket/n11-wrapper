@@ -77,7 +77,7 @@ class N11SoapClient extends \SoapClient
             if (\strcmp($e->getMessage(), 'Forbidden') === 0) {
                 throw new N11Exception('Yetkisiz giriş.');
             }
-            throw new N11Exception(sprintf('Fonksiyon çağrılırken bir hata oluştu (%s): %s', $e->faultcode, $e->getMessage()));
+            throw new N11Exception(\sprintf('Fonksiyon çağrılırken bir hata oluştu (%s): %s', $e->faultcode, $e->getMessage()));
         }
     }
 }

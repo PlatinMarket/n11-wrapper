@@ -20,6 +20,6 @@ class N11Exception extends \Exception
      */
     public function __toString()
     {
-        return sprintf("%s: [%s]: %s\n", __CLASS__, $this->code, $this->message);
+        return \sprintf("%s: [%s]: %s\n", __CLASS__, $this->code, $this->message);
     }
 }

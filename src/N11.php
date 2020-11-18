@@ -4,29 +4,28 @@ namespace N11;
 
 /**
  * N11 SOAP API PHP Wrapper
- * @package N11
  */
 class N11
 {
     /**
      * @var string N11 API key
      */
-    protected $appKey;
+    protected $_appKey;
 
     /**
      * @var string N11 API secret
      */
-    protected $appSecret;
+    protected $_appSecret;
 
     /**
      * @var array Global options of the class
      */
-    protected $options = [];
+    protected $_options = [];
 
     /**
      * @var string N11 SOAP API service location
      */
-    private $webServicesUri = 'https://api.n11.com/ws';
+    private $_webServicesUri = 'https://api.n11.com/ws';
 
     /**
      * The N11 API credentials should be passed to the constructor.
@@ -53,90 +52,99 @@ class N11
             'as_array' => false,
         ];
 
-        $this->appKey = $appKey;
-        $this->appSecret = $appSecret;
+        $this->_appKey = $appKey;
+        $this->_appSecret = $appSecret;
 
         $this->setOptions(\array_merge($defaultOptions, $options));
     }
 
     /**
      * API key getter
+     *
      * @return string
      */
     public function getAppKey()
     {
-        return $this->appKey;
+        return $this->_appKey;
     }
 
     /**
      * API key setter
+     *
      * @param string $appKey
      */
     public function setAppKey($appKey)
     {
-        $this->appKey = $appKey;
+        $this->_appKey = $appKey;
     }
 
     /**
      * API secret getter
+     *
      * @return string
      */
     public function getAppSecret()
     {
-        return $this->appSecret;
+        return $this->_appSecret;
     }
 
     /**
      * API secret setter
+     *
      * @param string $appSecret
      */
     public function setAppSecret($appSecret)
     {
-        $this->appSecret = $appSecret;
+        $this->_appSecret = $appSecret;
     }
 
     /**
      * Global class options getter
+     *
      * @return array
      */
     public function getOptions()
     {
-        return $this->options;
+        return $this->_options;
     }
 
     /**
      * Global class options setter
+     *
      * @param $options
      */
     public function setOptions($options)
     {
-        $this->options = \array_merge($this->options, $options);
+        $this->_options = \array_merge($this->_options, $options);
     }
 
     /**
      * Get all top level N11 categories
+     *
      * @return array
      * @throws N11Exception
      */
     public function fetchCategories()
     {
-        return $this->soapRequest('CategoryService', 'GetTopLevelCategories');
+        return $this->_soapRequest('CategoryService', 'GetTopLevelCategories');
     }
 
     /**
      * Get all sub N11 categories by an Id of the parent category
+     *
      * @param $categoryId
      * @return array
      * @throws N11Exception
      */
     public function fetchSubCategories($categoryId)
     {
-        return $this->soapRequest('CategoryService', 'GetSubCategories',
+        return $this->_soapRequest('CategoryService', 'GetSubCategories',
             \compact('categoryId'));
     }
 
     /**
      * Get detailed N11 category attributes by category Id
+     *
      * @param $categoryId
      * @param int $currentPage
      * @param null $pageSize
@@ -154,11 +162,12 @@ class N11
             $params['pagingData']['pageSize'] = $pageSize;
         }
 
-        return $this->soapRequest('CategoryService', 'GetCategoryAttributes', $params);
+        return $this->_soapRequest('CategoryService', 'GetCategoryAttributes', $params);
     }
 
     /**
      * Get N11 category attribute values by category attribute Id
+     *
      * @param $categoryProductAttributeId
      * @param int $currentPage
      * @param null $pageSize
@@ -176,54 +185,58 @@ class N11
             $params['pagingData']['pageSize'] = $pageSize;
         }
 
-        return $this->soapRequest('CategoryService', 'GetCategoryAttributeValue', $params);
+        return $this->_soapRequest('CategoryService', 'GetCategoryAttributeValue', $params);
     }
 
     /**
      * Get the parent N11 category by category Id
+     *
      * @param $categoryId
      * @return array
      * @throws N11Exception
      */
     public function fetchParentCategory($categoryId)
     {
-        return $this->soapRequest('CategoryService', 'GetParentCategory',
+        return $this->_soapRequest('CategoryService', 'GetParentCategory',
             \compact('categoryId'));
     }
 
     /**
      * Get N11 category attribute list by category Id
+     *
      * @param $categoryId
      * @return mixed
      * @throws N11Exception
      */
     public function fetchCategoryAttributeList($categoryId)
     {
-        return $this->soapRequest('CategoryService', 'GetCategoryAttributesId',
+        return $this->_soapRequest('CategoryService', 'GetCategoryAttributesId',
             \compact('categoryId'));
     }
 
     /**
      * Get all cities
+     *
      * @return array
      * @throws N11Exception
      */
     public function fetchCities()
     {
-        return $this->soapRequest('CityService', 'GetCities',
+        return $this->_soapRequest('CityService', 'GetCities',
             [],
             [ 'auth' => false ]);
     }
 
     /**
      * Get city data by city code
+     *
      * @param $cityCode
      * @return array
      * @throws N11Exception
      */
     public function fetchCity($cityCode)
     {
-        return $this->soapRequest('CityService', 'GetCity',
+        return $this->_soapRequest('CityService', 'GetCity',
             \compact('cityCode'),
             [ 'auth' => false ]
         );
@@ -231,13 +244,14 @@ class N11
 
     /**
      * Get all districts by city code
+     *
      * @param $cityCode
      * @return array
      * @throws N11Exception
      */
     public function fetchDistricts($cityCode)
     {
-        return $this->soapRequest('CityService', 'GetDistrict',
+        return $this->_soapRequest('CityService', 'GetDistrict',
             \compact('cityCode'),
             [ 'auth' => false ]
         );
@@ -245,13 +259,14 @@ class N11
 
     /**
      * Get neighbor districts by district Id
+     *
      * @param $districtId
      * @return array
      * @throws N11Exception
      */
     public function fetchNeighborhoods($districtId)
     {
-        return $this->soapRequest('CityService', 'GetNeighborhoods',
+        return $this->_soapRequest('CityService', 'GetNeighborhoods',
             \compact('districtId'),
             [ 'auth' => false ]
         );
@@ -259,6 +274,7 @@ class N11
 
     /**
      * Get the N11 product list of the account
+     *
      * @param $currentPage
      * @param $pageSize
      * @return array
@@ -274,7 +290,7 @@ class N11
             $params['pagingData']['pageSize'] = $pageSize;
         }
 
-        return $this->soapRequest('ProductService', 'GetProductList', $params);
+        return $this->_soapRequest('ProductService', 'GetProductList', $params);
     }
 
     /**
@@ -285,19 +301,20 @@ class N11
      */
     public function fetchProductById($productId)
     {
-        return $this->soapRequest('ProductService', 'GetProductByProductId',
+        return $this->_soapRequest('ProductService', 'GetProductByProductId',
             \compact('productId'));
     }
 
     /**
      * Get product details by its own merchant code
+     *
      * @param string $sellerCode
      * @return array
      * @throws N11Exception
      */
     public function fetchProductBySeller($sellerCode)
     {
-        return $this->soapRequest('ProductService', 'GetProductBySellerCode',
+        return $this->_soapRequest('ProductService', 'GetProductBySellerCode',
             \compact('sellerCode'));
     }
 
@@ -383,18 +400,25 @@ class N11
      */
     public function saveProduct(array $data)
     {
-        return $this->soapRequest('ProductService', 'SaveProduct', $data);
+        return $this->_soapRequest('ProductService', 'SaveProduct', $data);
     }
 
     /**
      * A simple SOAP wrapper to send request to and receive response from N11 API
-     * @param string $service
-     * @param string $method
+     *
+     * Example usage:
+     *
+     *      $this->_soapRequest('CategoryService', 'GetSubCategories', [
+     *          categoryId => '<CATEGORY_ID>'
+     *      ]);
+     *
+     * @param string $serviceName N11 SOAP service name
+     * @param string $methodName N11 SOAP method name
      * @param array $params
      * @return array
      * @throws N11Exception
      */
-    protected function soapRequest($service, $method, array $params = [], array $options = []): array
+    protected function _soapRequest($serviceName, $methodName, array $params = [], array $options = []): array
     {
         $defaultOptions = [
             'auth' => true,
@@ -403,17 +427,17 @@ class N11
         $options = \array_merge($defaultOptions, $options);
 
         if ($options['auth']) {
-            $params = \array_merge($params, $this->authParams());
+            $params = \array_merge($params, $this->_authParams());
         }
 
-        $uri = \sprintf('%s/%s.wsdl', $this->webServicesUri, $service);
+        $uri = \sprintf('%s/%s.wsdl', $this->_webServicesUri, $serviceName);
 
         $client = new N11SoapClient($uri, [
             'cache_wsdl' => \WSDL_CACHE_NONE,
             'trace' => false,
         ]);
 
-        $response = $client->$method($params);
+        $response = $client->$methodName($params);
 
         // Object to array conversion recursively
         $toArray = function($e) use(&$toArray)
@@ -421,7 +445,7 @@ class N11
             return \is_scalar($e) ? $e : \array_map($toArray, (array) $e);
         };
 
-        if (isset($this->options['as_array']) && $this->options['as_array']) {
+        if (isset($this->_options['as_array']) && $this->_options['as_array']) {
             $response = $toArray($response);
         }
 
@@ -430,14 +454,15 @@ class N11
 
     /**
      * Get auth parameters dynamically in a special format to be able to send request to N11 API
+     *
      * @return array
      */
-    protected function authParams()
+    protected function _authParams()
     {
         return [
             'auth' => [
-                'appKey' => $this->appKey,
-                'appSecret' => $this->appSecret,
+                'appKey' => $this->_appKey,
+                'appSecret' => $this->_appSecret,
             ],
         ];
     }
