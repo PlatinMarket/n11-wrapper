@@ -38,7 +38,7 @@ class N11
      *      $n11 = new N11(
      *          '<APP_KEY>',
      *          '<APP_SECRET>',
-     *          $options = [
+     *          [
      *              'as_array' => true,
      *          ]
      *      );
@@ -330,7 +330,7 @@ class N11
      *               'subtitle' => 'Örnek Altbaşlık',
      *               'description' => 'Örnek açıklama',
      *               'category' => [
-     *                   'id' => 999999
+     *                   'id' => 999999,
      *               ],
      *               'price' => 99.00,
      *               'domestic' => true,
@@ -339,7 +339,7 @@ class N11
      *                  'image' => [
      *                      [
      *                          'url' => 'https://picsum.photos/1024/1024',
-     *                          'order' => 1
+     *                          'order' => 1,
      *                      ]
      *                  ],
      *               ],
@@ -352,7 +352,7 @@ class N11
      *                      ],
      *                      [
      *                          'name' => 'Aroma',
-     *                          'value' => 'Sade'
+     *                          'value' => 'Sade',
      *                      ],
      *                  ]
      *               ],
@@ -379,7 +379,7 @@ class N11
      *                          'attribute' => [
      *                              [
      *                                  'name' => 'Marka',
-     *                                  'value' => 'Diğer'
+     *                                  'value' => 'Diğer',
      *                              ],
      *                          ],
      *                      ],
@@ -408,9 +408,16 @@ class N11
      *
      * Example usage:
      *
-     *      $this->_soapRequest('CategoryService', 'GetSubCategories', [
-     *          categoryId => '<CATEGORY_ID>'
-     *      ]);
+     *      $this->_soapRequest(
+     *          'CategoryService',
+     *          'GetSubCategories',
+     *          [
+     *              categoryId => '<CATEGORY_ID>',
+     *          ],
+     *          [
+     *              'auth' => false,
+     *          ],
+     *      );
      *
      * @param string $serviceName N11 SOAP service name
      * @param string $methodName N11 SOAP method name
