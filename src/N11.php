@@ -45,8 +45,9 @@ class N11
      *
      * @param string $appKey N11 API key
      * @param string $appSecret N11 API secret
+     * @param array $options
      */
-    public function __construct($appKey, $appSecret, array $options = [])
+    public function __construct(string $appKey, string $appSecret, array $options = [])
     {
         $defaultOptions = [
             'as_array' => false,
@@ -422,10 +423,11 @@ class N11
      * @param string $serviceName N11 SOAP service name
      * @param string $methodName N11 SOAP method name
      * @param array $params
+     * @param array $options
      * @return array
      * @throws N11Exception
      */
-    protected function _soapRequest($serviceName, $methodName, array $params = [], array $options = []): array
+    protected function _soapRequest(string $serviceName, string $methodName, array $params = [], array $options = []): array
     {
         $defaultOptions = [
             'auth' => true,
