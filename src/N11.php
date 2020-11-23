@@ -74,7 +74,7 @@ class N11
      *
      * @param string $appKey
      */
-    public function setAppKey($appKey)
+    public function setAppKey(string $appKey)
     {
         $this->_appKey = $appKey;
     }
@@ -94,7 +94,7 @@ class N11
      *
      * @param string $appSecret
      */
-    public function setAppSecret($appSecret)
+    public function setAppSecret(string $appSecret)
     {
         $this->_appSecret = $appSecret;
     }
@@ -112,9 +112,9 @@ class N11
     /**
      * Global class options setter
      *
-     * @param $options
+     * @param array $options
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         $this->_options = \array_merge($this->_options, $options);
     }
@@ -300,7 +300,7 @@ class N11
      * @return array
      * @throws N11Exception
      */
-    public function fetchProductById($productId)
+    public function fetchProductById(string $productId)
     {
         return $this->_soapRequest('ProductService', 'GetProductByProductId',
             \compact('productId'));
@@ -313,7 +313,7 @@ class N11
      * @return array
      * @throws N11Exception
      */
-    public function fetchProductBySeller($sellerCode)
+    public function fetchProductBySeller(string $sellerCode)
     {
         return $this->_soapRequest('ProductService', 'GetProductBySellerCode',
             \compact('sellerCode'));
