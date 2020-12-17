@@ -404,6 +404,30 @@ class N11
     }
 
     /**
+     * Delete product by product Id
+     *
+     * @param $productId
+     * @return array
+     * @throws N11Exception
+     */
+    public function deleteProduct($productId)
+    {
+        return $this->_soapRequest('ProductService', 'DeleteProductById', compact('productId'));
+    }
+
+    /**
+     * Delete product by seller code of the product
+     *
+     * @param $productId
+     * @return array
+     * @throws N11Exception
+     */
+    public function deleteProductBySellerCode($productSellerCode)
+    {
+        return $this->_soapRequest('ProductService', 'DeleteProductBySellerCode', compact('productSellerCode'));
+    }
+
+    /**
      * A simple SOAP wrapper to send request to and receive response from N11 API
      *
      * Example usage:
