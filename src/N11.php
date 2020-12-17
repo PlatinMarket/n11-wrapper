@@ -45,8 +45,9 @@ class N11
      *
      * @param string $appKey N11 API key
      * @param string $appSecret N11 API secret
+     * @param array $options
      */
-    public function __construct($appKey, $appSecret, array $options = [])
+    public function __construct(string $appKey, string $appSecret, array $options = [])
     {
         $defaultOptions = [
             'as_array' => false,
@@ -73,7 +74,7 @@ class N11
      *
      * @param string $appKey
      */
-    public function setAppKey($appKey)
+    public function setAppKey(string $appKey)
     {
         $this->_appKey = $appKey;
     }
@@ -93,7 +94,7 @@ class N11
      *
      * @param string $appSecret
      */
-    public function setAppSecret($appSecret)
+    public function setAppSecret(string $appSecret)
     {
         $this->_appSecret = $appSecret;
     }
@@ -111,9 +112,9 @@ class N11
     /**
      * Global class options setter
      *
-     * @param $options
+     * @param array $options
      */
-    public function setOptions($options)
+    public function setOptions(array $options)
     {
         $this->_options = \array_merge($this->_options, $options);
     }
@@ -299,7 +300,7 @@ class N11
      * @return array
      * @throws N11Exception
      */
-    public function fetchProductById($productId)
+    public function fetchProductById(string $productId)
     {
         return $this->_soapRequest('ProductService', 'GetProductByProductId',
             \compact('productId'));
@@ -312,7 +313,7 @@ class N11
      * @return array
      * @throws N11Exception
      */
-    public function fetchProductBySeller($sellerCode)
+    public function fetchProductBySeller(string $sellerCode)
     {
         return $this->_soapRequest('ProductService', 'GetProductBySellerCode',
             \compact('sellerCode'));
@@ -446,10 +447,11 @@ class N11
      * @param string $serviceName N11 SOAP service name
      * @param string $methodName N11 SOAP method name
      * @param array $params
+     * @param array $options
      * @return array
      * @throws N11Exception
      */
-    protected function _soapRequest($serviceName, $methodName, array $params = [], array $options = []): array
+    protected function _soapRequest(string $serviceName, string $methodName, array $params = [], array $options = []): array
     {
         $defaultOptions = [
             'auth' => true,
