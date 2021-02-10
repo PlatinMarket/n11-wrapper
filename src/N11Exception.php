@@ -3,6 +3,8 @@
 
 namespace N11;
 
+use Throwable;
+
 /**
  * Class N11Exception
  *
@@ -11,15 +13,18 @@ namespace N11;
 class N11Exception extends \Exception
 {
     /**
-     * @var string
+     * @var \stdClass
      */
-    protected $message = 'Bilinmeyen hata.';
+    public $response;
 
     /**
-     * @return string
+     * N11Exception constructor.
+     * @param \Exception $e
+     * @param \stdClass|null $response
      */
-    public function __toString()
+    public function __construct(\Exception $e, \stdClass $response = null)
     {
-        return \sprintf("%s: [%s]: %s\n", __CLASS__, $this->code, $this->message);
+        parent::__construct($e->getMessage(), $e->getCode(), $e);
+        $this->response = $response;
     }
 }

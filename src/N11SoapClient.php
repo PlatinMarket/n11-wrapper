@@ -20,7 +20,7 @@ class N11SoapClient extends \SoapClient
             parent::__construct($wsdl, $options);
         }
         catch (\SoapFault $e) {
-            throw new N11Exception('İstemci oluşturulurken bir hata oluştu: %s', $e->getMessage());
+            throw new N11Exception($e);
         }
     }
 
@@ -39,7 +39,7 @@ class N11SoapClient extends \SoapClient
             return parent::__soapCall($function_name, $arguments, $options, $input_headers, $output_headers);
         }
         catch (\SoapFault $e) {
-            throw new N11Exception('Fonksiyon çağrılırken bir hata oluştu: %s', $e->getMessage());
+            throw new N11Exception($e);
         }
     }
 
@@ -58,7 +58,7 @@ class N11SoapClient extends \SoapClient
             return parent::__doRequest($request, $location, $action, $version, $one_way);
         }
         catch (\SoapFault $e) {
-            throw new N11Exception('İstekte bulunulurken bir hata oluştu: %s', $e->getMessage());
+            throw new N11Exception($e);
         }
     }
 
@@ -74,10 +74,7 @@ class N11SoapClient extends \SoapClient
             return parent::__call($function_name, $arguments);
         }
         catch (\SoapFault $e) {
-            if (\strcmp($e->getMessage(), 'Forbidden') === 0) {
-                throw new N11Exception('Yetkisiz giriş.');
-            }
-            throw new N11Exception(\sprintf('Fonksiyon çağrılırken bir hata oluştu (%s): %s', $e->faultcode, $e->getMessage()));
+            throw new N11Exception($e);
         }
     }
 }

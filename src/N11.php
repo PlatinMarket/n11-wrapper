@@ -28,6 +28,11 @@ class N11
     private $_webServicesUri = 'https://api.n11.com/ws';
 
     /**
+     * @var N11SoapClient[]
+     */
+    private $_n11Client = [];
+
+    /**
      * The N11 API credentials should be passed to the constructor.
      * Third parameter can be an options array optionally. If 'as_array'
      * option set as true, all received response elements will be array
@@ -49,9 +54,7 @@ class N11
      */
     public function __construct(string $appKey, string $appSecret, array $options = [])
     {
-        $defaultOptions = [
-            'as_array' => false,
-        ];
+        $defaultOptions = [];
 
         $this->_appKey = $appKey;
         $this->_appSecret = $appSecret;
@@ -223,9 +226,7 @@ class N11
      */
     public function fetchCities()
     {
-        return $this->_soapRequest('CityService', 'GetCities',
-            [],
-            [ 'auth' => false ]);
+        return $this->_soapRequest('CityService', 'GetCities');
     }
 
     /**
@@ -238,8 +239,7 @@ class N11
     public function fetchCity($cityCode)
     {
         return $this->_soapRequest('CityService', 'GetCity',
-            \compact('cityCode'),
-            [ 'auth' => false ]
+            \compact('cityCode')
         );
     }
 
@@ -253,8 +253,7 @@ class N11
     public function fetchDistricts($cityCode)
     {
         return $this->_soapRequest('CityService', 'GetDistrict',
-            \compact('cityCode'),
-            [ 'auth' => false ]
+            \compact('cityCode')
         );
     }
 
@@ -268,8 +267,7 @@ class N11
     public function fetchNeighborhoods($districtId)
     {
         return $this->_soapRequest('CityService', 'GetNeighborhoods',
-            \compact('districtId'),
-            [ 'auth' => false ]
+            \compact('districtId')
         );
     }
 
@@ -453,36 +451,37 @@ class N11
      */
     protected function _soapRequest(string $serviceName, string $methodName, array $params = [], array $options = []): array
     {
-        $defaultOptions = [
-            'auth' => true,
-        ];
-
-        $options = \array_merge($defaultOptions, $options);
-
-        if ($options['auth']) {
-            $params = \array_merge($params, $this->_authParams());
-        }
+        $params = \array_merge($params, $this->_authParams());
 
         $uri = \sprintf('%s/%s.wsdl', $this->_webServicesUri, $serviceName);
 
-        $client = new N11SoapClient($uri, [
-            'cache_wsdl' => \WSDL_CACHE_NONE,
-            'trace' => false,
-        ]);
+        $client = $this->_createClient($uri);
 
         $response = $client->$methodName($params);
 
-        // Object to array conversion recursively
-        $toArray = function($e) use(&$toArray)
-        {
-            return \is_scalar($e) ? $e : \array_map($toArray, (array) $e);
-        };
-
-        if (isset($this->_options['as_array']) && $this->_options['as_array']) {
-            $response = $toArray($response);
+        if ($response->result->status !== "success") {
+            throw new N11Exception(new \Exception($response->result->errorMessage, (int) $response->result->errorCode), $response);
         }
 
-        return (array) $response;
+        return $repsonse = json_decode(json_encode($response), true);
+    }
+
+    /**
+     * @param string $uri
+     * @return N11SoapClient
+     * @throws N11Exception
+     */
+    protected function _createClient(string $uri)
+    {
+        $clientId = crc32($uri);
+        if (!isset($this->_n11Client[$clientId])) {
+            $this->_n11Client[$clientId] = new N11SoapClient($uri, [
+                'cache_wsdl' => WSDL_CACHE_NONE,
+                'exceptions' => 1,
+                'trace' => false,
+            ]);
+        }
+        return $this->_n11Client[$clientId];
     }
 
     /**
